@@ -48,10 +48,28 @@
                 Text="Submit"
                 Clicked="ButtonAdder"
                 x:Name="AddButton"/>
-            <Editor
-                IsReadOnly="True"
-                AutoSize="TextChanges"
-                x:Name="Editor"/>
+            <CollectionView
+                x:Name="ProductCollectionView"
+                ItemsSource="{Binding Products}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            Padding="10"
+                            Margin="5">
+                            <StackLayout>
+                                <Label Text="{Binding Name}" FontSize="20" />
+                                <Label Text="{Binding Price, StringFormat='Price: {0:C}'}" />
+                                <Label Text="{Binding Quantity, StringFormat='Quantity: {0}'}" />
+                                <Label Text="{Binding Category, StringFormat='Category: {0}'}" />
+                            </StackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <Editor
+                    IsReadOnly="True"
+                    AutoSize="TextChanges"
+                    x:Name="Editor"/>
+            </CollectionView>
             <!--
             <Image
                 Source="dotnet_bot.png"
