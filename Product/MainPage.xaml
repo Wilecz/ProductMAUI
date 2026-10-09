@@ -10,18 +10,44 @@
             <VerticalStackLayout
                 HeightRequest="120">
                 <Label
-                    HorizontalTextAlignment="Center"
                     FontSize="40"
                     x:Name="SearchText"
-                    Text="Searching"/>
+                    Text="Searching"
+                    HorizontalOptions="Center" TranslationY="40"
+                    />
             </VerticalStackLayout>
             <Entry
                 Placeholder="Enter product name"
-                x:Name="Entry"/>
+                x:Name="ProductSearchEntry"/>
+            <Button
+                Text="Search"
+                Clicked="ButtonSearch"
+                x:Name="SearchButton"/>
+            
+            <Entry
+                Placeholder="Enter product name"
+                x:Name="ProductNameEntry"/>
+            <Entry
+                Placeholder="Enter product price"
+                Keyboard="Numeric"
+                x:Name="ProductPriceEntry"/>
+            <Entry
+                Placeholder="Enter product quantity"
+                Keyboard="Numeric"
+                x:Name="ProductQuantityEntry"/>
+            <Picker
+                x:Name="ProductCategoryPicker">
+                <Picker.Items>
+                    <x:String>A</x:String>
+                    <x:String>B</x:String>
+                    <x:String>C</x:String>
+                    <x:String>D</x:String>
+                </Picker.Items>
+            </Picker>
             <Button
                 Text="Submit"
-                Clicked="Buttoner"
-                x:Name="Button"/>
+                Clicked="ButtonAdder"
+                x:Name="AddButton"/>
             <Editor
                 IsReadOnly="True"
                 AutoSize="TextChanges"
