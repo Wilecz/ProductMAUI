@@ -18,7 +18,7 @@ namespace Product
             InitializeComponent();
             ProductDisplay();
         }
-        private async Task ButtonSearch(object sender, EventArgs e)
+        private void ButtonSearch(object sender, EventArgs e)
         {
             var rnd = new Random();
             SearchText.TextColor = Color.FromRgb(rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256));
