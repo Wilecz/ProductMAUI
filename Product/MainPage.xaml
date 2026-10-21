@@ -65,12 +65,12 @@
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
-                <Editor
-                    IsReadOnly="True"
-                    AutoSize="TextChanges"
-                    x:Name="Editor"/>
             </CollectionView>
-            <!--
+            <Editor
+                IsReadOnly="True"
+                AutoSize="TextChanges"
+                x:Name="Editor"/>
+                <!--
             <Image
                 Source="dotnet_bot.png"
                 HeightRequest="185"
