@@ -4,6 +4,8 @@ namespace Product
 {
     public partial class MainPage : ContentPage
     {
+        private readonly List<Product> all = new();
+        public ObservableCollection<Product> Seen {get;} = new();
         public ObservableCollection<Products> ProductsCollection { get; set; }
         List<Products> products = new List<Products>
         {
@@ -52,5 +54,12 @@ namespace Product
                 i++;
             }
         }
+        private void Refresh()
+        {
+            Seen.Clear();
+            foreach (var p in Browser.Search(all, SearchArea.Text))
+                Seen.Add(p);
+        }
+        private void SearchArea_TextChanged(object sender, TextChangedEventArgs e) => Refresh();
     }
 }
