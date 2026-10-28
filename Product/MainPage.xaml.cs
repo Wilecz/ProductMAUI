@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using ClassLibrary;
 
 namespace Product
 {
@@ -22,7 +23,7 @@ namespace Product
         {
             var rnd = new Random();
             SearchText.TextColor = Color.FromRgb(rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256));
-            SearchText.FontSize = rnd.Next(10, 100);
+            SearchText.FontSize = rnd.Next(10, 60);
             ProductDisplay();
         }
         private void ButtonAdder(object sender, EventArgs e)
@@ -45,10 +46,10 @@ namespace Product
             int i = 1;
             foreach (var product in products)
             {
-                //if (product.Name.ToLower() == Entry.Text.ToLower() || Entry.Text == null)
-                //{
+                if (product.Name.ToLower() == ProductSearchEntry.Text.ToLower())
+                {
                     Editor.Text += $"{i}. Name: {product.Name}, Cost: {product.Cost}, Category: {product.Category}, Quantity: {product.Quantity}\n";
-                //}
+                }
                 i++;
             }
         }
