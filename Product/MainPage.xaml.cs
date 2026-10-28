@@ -57,9 +57,9 @@ namespace Product
         }
         private void Refresh()
         {
-            //Seen.Clear();
-            //foreach (var p in Browser.Search(all, SearchArea.Text))
-            //    Seen.Add(p);
+            Seen.Clear();
+            foreach (var p in Browser.Search(all, SearchArea.Text))
+                Seen.Add(p);
         }
         private void SearchArea_TextChanged(object sender, TextChangedEventArgs e) => Refresh();
     }
