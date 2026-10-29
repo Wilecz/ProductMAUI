@@ -18,6 +18,7 @@
             </VerticalStackLayout>
             <Entry
                 Placeholder="Enter product name"
+                TextChanged="ProductSearchTextChanged"
                 x:Name="ProductSearchEntry"/>
             <Button
                 Text="Search"

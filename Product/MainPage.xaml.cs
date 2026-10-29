@@ -5,9 +5,9 @@ namespace Product
 {
     public partial class MainPage : ContentPage
     {
-        private readonly List<Products> all = new();
-        public ObservableCollection<Products> Seen {get;} = new();
-        public ObservableCollection<Products> ProductsCollection { get; set; }
+        private readonly List<Interface> all = new();
+        public ObservableCollection<Interface> Seen {get;} = new();
+        public ObservableCollection<Interface> ProductsCollection { get; set; }
         List<Products> products = new List<Products>
         {
             new Products {Name = "Jajko", Cost = 34.23, Category = 'B', Quantity = 2},
@@ -48,19 +48,24 @@ namespace Product
             int i = 1;
             foreach (var product in products)
             {
-                if (product.Name.ToLower() == ProductSearchEntry.Text.ToLower())
+                if (ProductSearchEntry.Text != null && !product.Name.Contains(ProductSearchEntry.Text, StringComparison.OrdinalIgnoreCase))
                 {
-                    Editor.Text += $"{i}. Name: {product.Name}, Cost: {product.Cost}, Category: {product.Category}, Quantity: {product.Quantity}\n";
+                    continue;
                 }
+                Editor.Text += $"{i}. Name: {product.Name}, Cost: {product.Cost}, Category: {product.Category}, Quantity: {product.Quantity}\n";
                 i++;
             }
+        }
+        private void ProductSearchTextChanged(object sender, TextChangedEventArgs e)
+        {
+            ProductDisplay();
+            Refresh();
         }
         private void Refresh()
         {
             Seen.Clear();
-            foreach (var p in Browser.Search(all, SearchArea.Text))
+            foreach (var p in ClassLibrary.Browser.Search(all, ProductSearchEntry.Text))
                 Seen.Add(p);
         }
-        private void SearchArea_TextChanged(object sender, TextChangedEventArgs e) => Refresh();
     }
 }
