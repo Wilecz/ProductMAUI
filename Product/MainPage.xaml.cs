@@ -20,7 +20,6 @@ namespace Product
         public MainPage()
         {
             InitializeComponent();
-            ProductDisplay();
             Refresh();
         }
         private void ButtonSearch(object sender, EventArgs e)
@@ -28,7 +27,7 @@ namespace Product
             var rnd = new Random();
             SearchText.TextColor = Color.FromRgb(rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256));
             SearchText.FontSize = rnd.Next(10, 60);
-            ProductDisplay();
+            Refresh();
         }
         private void ButtonAdder(object sender, EventArgs e)
         {
@@ -38,6 +37,8 @@ namespace Product
                 double newProductCost = double.Parse(ProductPriceEntry.Text);
                 char newProductCategory = char.Parse(ProductCategoryPicker.SelectedItem.ToString());
                 uint newProductQuantity = uint.Parse(ProductQuantityEntry.Text);
+                products.Add(new Products { Name = newProductName, Cost = newProductCost, Category = newProductCategory, Quantity = newProductQuantity });
+                Refresh();
             }
             else
             {
@@ -60,7 +61,6 @@ namespace Product
         }
         private void ProductSearchTextChanged(object sender, TextChangedEventArgs e)
         {
-            ProductDisplay();
             Refresh();
         }
         private void Refresh()
@@ -68,6 +68,7 @@ namespace Product
             SeenProducts.Clear();
             foreach (var p in ClassLibrary.Browser.Search(all, ProductSearchEntry.Text))
                 SeenProducts.Add(p);
+            ProductDisplay();
         }
     }
 }
