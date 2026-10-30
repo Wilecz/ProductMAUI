@@ -5,9 +5,10 @@ namespace Product
 {
     public partial class MainPage : ContentPage
     {
-        private readonly List<Interface> all = new();
-        public ObservableCollection<Interface> Seen {get;} = new();
-        public ObservableCollection<Interface> ProductsCollection { get; set; }
+        public readonly List<Products> productsList = new();
+        private readonly List<ProductInterface> all = new();
+        public ObservableCollection<ProductInterface> SeenProducts {get;} = new();
+        public ObservableCollection<ProductInterface> ProductsCollection { get; set; }
         List<Products> products = new List<Products>
         {
             new Products {Name = "Jajko", Cost = 34.23, Category = 'B', Quantity = 2},
@@ -20,6 +21,7 @@ namespace Product
         {
             InitializeComponent();
             ProductDisplay();
+            Refresh();
         }
         private void ButtonSearch(object sender, EventArgs e)
         {
@@ -63,9 +65,9 @@ namespace Product
         }
         private void Refresh()
         {
-            Seen.Clear();
+            SeenProducts.Clear();
             foreach (var p in ClassLibrary.Browser.Search(all, ProductSearchEntry.Text))
-                Seen.Add(p);
+                SeenProducts.Add(p);
         }
     }
 }

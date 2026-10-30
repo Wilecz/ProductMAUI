@@ -16,7 +16,7 @@
                     HorizontalOptions="Center" TranslationY="40"
                     />
             </VerticalStackLayout>
-            <Entry
+            <SearchBar
                 Placeholder="Enter product name"
                 TextChanged="ProductSearchTextChanged"
                 x:Name="ProductSearchEntry"/>
