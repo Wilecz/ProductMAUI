@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="../ConsoleApp1/ConsoleApp1/ConsoleApp1.csproj" />
+  <Project Path="../ConsoleApp1/TestProject1/TestProject1.csproj" />
+  <Project Path="../Product/Product/Product.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
+  <Project Path="ClassLibrary/ClassLibrary.csproj" />
+</Solution>
