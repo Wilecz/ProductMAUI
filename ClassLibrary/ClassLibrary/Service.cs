@@ -6,7 +6,7 @@ namespace ClassLibrary
 {
     public class Service : Products
     {
-        public override double StockPrice { get; set; }
+        public override double StockPrice => 0;
 
     }
 }

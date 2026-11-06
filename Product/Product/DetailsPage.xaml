@@ -6,7 +6,7 @@
     <VerticalStackLayout>
         <Label Text="{Binding Name}" FontSize="24" FontAttributes="Bold" />
         <Label Text="{Binding Category, StringFormat='Category: {0}'}" />
-        <Label Text="{Binding Price, StringFormat='Price: {0:C}'}" />
+        <Label Text="{Binding Cost, StringFormat='Cost: {0:C}'}" />
         <Label Text="{Binding Quantity, StringFormat='In Stock: {0} pcs.'}" />
         <Label Text="{Binding StockPrice, StringFormat='Stock Price: {0:C}'}" />
         <Label x:Name="descriptionLabel" />

@@ -10,7 +10,7 @@ namespace ClassLibrary
         public double Cost { get; set; }
         public char Category { get; set; }
         public uint Quantity { get; set; }
-        public virtual double StockPrice { get; set; }
+        public virtual double StockPrice { get { return Cost * Quantity; } }
 
         public static void DisplayProductInfo(Products product)
         {

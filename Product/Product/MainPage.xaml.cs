@@ -21,6 +21,8 @@ namespace Product
         public MainPage()
         {
             InitializeComponent();
+            all.AddRange(products);
+            BindingContext = this;
             Refresh();
         }
         private async void ButtonSearch(object sender, EventArgs e)
@@ -45,26 +47,14 @@ namespace Product
                 double newProductCost = double.Parse(ProductPriceEntry.Text);
                 char newProductCategory = char.Parse(ProductCategoryPicker.SelectedItem.ToString());
                 uint newProductQuantity = uint.Parse(ProductQuantityEntry.Text);
-                products.Add(new Products { Name = newProductName, Cost = newProductCost, Category = newProductCategory, Quantity = newProductQuantity });
+                var newProduct = new Products { Name = newProductName, Cost = newProductCost, Category = newProductCategory, Quantity = newProductQuantity };
+                products.Add(newProduct);
+                all.Add(newProduct);
                 Refresh();
             }
             else
             {
                 DisplayAlertAsync("Error", "Please fill in all fields.", "OK");
-            }
-        }
-        private void ProductDisplay()
-        {
-            Editor.Text = null;
-            int i = 1;
-            foreach (var product in products)
-            {
-                if (ProductSearchEntry.Text != null && !product.Name.Contains(ProductSearchEntry.Text, StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-                Editor.Text += $"{i}. Name: {product.Name}, Cost: {product.Cost}, Category: {product.Category}, Quantity: {product.Quantity}\n";
-                i++;
             }
         }
         private void ProductSearchTextChanged(object sender, TextChangedEventArgs e)
@@ -76,21 +66,15 @@ namespace Product
             SeenProducts.Clear();
             foreach (var p in ClassLibrary.Browser.Search(all, ProductSearchEntry.Text))
                 SeenProducts.Add(p);
-            ProductDisplay();
         }
         private async void DetailButtonClicked(object sender, EventArgs e)
         {
-            if (ProductSearchEntry.Text != null)
+            if (ProductCollectionView?.SelectedItem is Products selected)
             {
-                var chosen = products.FirstOrDefault(p => p.Name == ProductSearchEntry.Text);
-                if (chosen != null)
+                await Shell.Current.GoToAsync(nameof(DetailsPage), new Dictionary<string, object>
                 {
-                    await Navigation.PushAsync(new DetailsPage(chosen));
-                }
-            }
-            else
-            {
-                await DisplayAlertAsync("Error", "Please select a product first.", "OK");
+                    ["Product"] = selected
+                });
             }
         }
     }
