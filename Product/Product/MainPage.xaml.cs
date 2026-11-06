@@ -1,5 +1,6 @@
-﻿using System.Collections.ObjectModel;
-using ClassLibrary;
+﻿using ClassLibrary;
+using System.Collections.ObjectModel;
+
 
 namespace Product
 {
@@ -7,7 +8,7 @@ namespace Product
     {
         public readonly List<Products> productsList = new();
         private readonly List<ProductInterface> all = new();
-        public ObservableCollection<ProductInterface> SeenProducts {get;} = new();
+        public ObservableCollection<ProductInterface> SeenProducts { get; } = new();
         public ObservableCollection<ProductInterface> ProductsCollection { get; set; }
         List<Products> products = new List<Products>
         {
@@ -22,16 +23,23 @@ namespace Product
             InitializeComponent();
             Refresh();
         }
-        private void ButtonSearch(object sender, EventArgs e)
+        private async void ButtonSearch(object sender, EventArgs e)
         {
             var rnd = new Random();
+            int searchTextSize = 0;
             SearchText.TextColor = Color.FromRgb(rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256));
-            SearchText.FontSize = rnd.Next(10, 60);
+            while (searchTextSize <= 40)
+            {
+                searchTextSize++;
+                SearchText.FontSize = searchTextSize;
+                await Task.Delay(searchTextSize + 15);
+            }
+            searchTextSize = 0;
             Refresh();
         }
         private void ButtonAdder(object sender, EventArgs e)
         {
-            if(ProductNameEntry.Text != null && ProductPriceEntry.Text != null && ProductCategoryPicker.SelectedItem != null && ProductQuantityEntry.Text != null)
+            if (ProductNameEntry.Text != null && ProductPriceEntry.Text != null && ProductCategoryPicker.SelectedItem != null && ProductQuantityEntry.Text != null)
             {
                 string newProductName = ProductNameEntry.Text;
                 double newProductCost = double.Parse(ProductPriceEntry.Text);
@@ -69,6 +77,21 @@ namespace Product
             foreach (var p in ClassLibrary.Browser.Search(all, ProductSearchEntry.Text))
                 SeenProducts.Add(p);
             ProductDisplay();
+        }
+        private async void DetailButtonClicked(object sender, EventArgs e)
+        {
+            if (ProductSearchEntry.Text != null)
+            {
+                var chosen = products.FirstOrDefault(p => p.Name == ProductSearchEntry.Text);
+                if (chosen != null)
+                {
+                    await Navigation.PushAsync(new DetailsPage(chosen));
+                }
+            }
+            else
+            {
+                await DisplayAlertAsync("Error", "Please select a product first.", "OK");
+            }
         }
     }
 }

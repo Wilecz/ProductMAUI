@@ -9,6 +9,12 @@
             Spacing="25">
             <VerticalStackLayout
                 HeightRequest="120">
+                <HorizontalStackLayout
+                    Spacing="10"
+                    HorizontalOptions="Center"
+                    TranslationY="40">
+                    <Button Text="Details" Clicked="DetailButtonClicked" />
+                </HorizontalStackLayout>
                 <Label
                     FontSize="40"
                     x:Name="SearchText"
