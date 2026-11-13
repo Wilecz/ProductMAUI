@@ -7,6 +7,7 @@ namespace ClassLibrary
     public class Service : Products
     {
         public override double StockPrice => 0;
+        public override string ToString() => Description();
 
     }
 }
