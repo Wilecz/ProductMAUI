@@ -77,5 +77,14 @@ namespace Product
                 });
             }
         }
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            Refresh();
+        }
+        private void ButtonShowAddProductStack(object sender, EventArgs e)
+        {
+            AddProductStack.IsVisible = !AddProductStack.IsVisible;
+        }
     }
 }
