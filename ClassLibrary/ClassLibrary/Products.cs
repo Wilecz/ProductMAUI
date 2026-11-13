@@ -1,15 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ClassLibrary
 {
-    public class Products : ProductInterface, IComparable<Products>
+    public class Products : ProductInterface, IComparable<Products>, INotifyPropertyChanged
     {
-        public string Name { get; set; }
-        public double Cost { get; set; }
-        public char Category { get; set; }
-        public uint Quantity { get; set; }
+        private string name { get; set; }
+        public string Name 
+        {
+            get { return name; }
+            set
+            {
+                if(name != value)
+                {
+                    name = value;
+                    OnPropertyChanged(nameof(Name));
+                }
+            }
+        }
+        private double cost { get; set; }
+        public double Cost 
+        {
+            get { return cost; }
+            set
+            {
+                if(cost != value)
+                {
+                    cost = value;
+                    OnPropertyChanged(nameof(Cost));
+                }
+            }
+        }
+        private char category { get; set; }
+        public char Category {
+            get { return category; }
+            set
+            {
+                if (category != value)
+                {
+                    category = value;
+                    OnPropertyChanged(nameof(Category));
+                }
+            }
+        }
+        private uint quantity { get; set; }
+        public uint Quantity {
+            get { return quantity; }
+            set
+            {
+                if (quantity != value)
+                {
+                    quantity = value;
+                    OnPropertyChanged(nameof(Quantity));
+                }
+            }
+        }
         public virtual double StockPrice { get { return Cost * Quantity; } }
 
         public static void DisplayProductInfo(Products product)
@@ -45,6 +93,12 @@ namespace ClassLibrary
             FoundProducts.Clear();
             FoundProducts = products.Where(p => p.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
             return FoundProducts;
+        }
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -3,65 +3,89 @@ namespace Product;
 
 public partial class DetailsPage : ContentPage, IQueryAttributable
 {
-	public DetailsPage()
-	{
-		InitializeComponent();
+    private Products? product;
+    private List<Products>? productsList;
+    private List<ProductInterface>? allProducts;
+
+    public DetailsPage()
+    {
+        InitializeComponent();
     }
+
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (query["Product"] is Products product)
+        if (query.TryGetValue("Product", out var productValue) && productValue is Products selectedProduct)
         {
+            product = selectedProduct;
             BindingContext = product;
             descriptionLabel.Text = product.Description();
+            ProductNameEntry.Text = product.Name;
+            ProductPriceEntry.Text = product.Cost.ToString("0.##");
+            ProductQuantityEntry.Text = product.Quantity.ToString();
+            ProductCategoryPicker.SelectedItem = product.Category.ToString();
+        }
+
+        if (query.TryGetValue("ProductsList", out var productsListValue) && productsListValue is List<Products> selectedProductsList)
+        {
+            productsList = selectedProductsList;
+        }
+
+        if (query.TryGetValue("AllProducts", out var allProductsValue) && allProductsValue is List<ProductInterface> selectedAllProducts)
+        {
+            allProducts = selectedAllProducts;
         }
     }
-    private void ButtonChanger(object sender, EventArgs e)
+
+    private async void ButtonChanger(object? sender, EventArgs e)
     {
-        //if (ProductNameEntry.Text != null && ProductPriceEntry.Text != null && ProductCategoryPicker.SelectedItem != null && ProductQuantityEntry.Text != null)
-        //{
-        //    string newProductName = ProductNameEntry.Text;
-        //    double newProductCost = double.Parse(ProductPriceEntry.Text);
-        //    char newProductCategory = char.Parse(ProductCategoryPicker.SelectedItem.ToString());
-        //    uint newProductQuantity = uint.Parse(ProductQuantityEntry.Text);
-        //    var newProduct = new Products { Name = newProductName, Cost = newProductCost, Category = newProductCategory, Quantity = newProductQuantity };
-        //    BindingContext = newProduct;
-        //    newProduct.Name = newProductName;
-        //    newProduct.Cost = newProductCost;
-        //    newProduct.Category = newProductCategory;
-        //    newProduct.Quantity = newProductQuantity;
-        //    DisplayAlertAsync("Success", "Product details updated successfully.", "OK");
-        //}
-        //else
-        //{
-        //    DisplayAlertAsync("Error", "Please fill in all fields.", "OK");
-        //}
-        if(ProductNameEntry.Text != null)
+        if (product is null)
         {
-            ((Products)BindingContext).Name = ProductNameEntry.Text;
+            await DisplayAlertAsync("Error", "The product could not be loaded.", "OK");
+            return;
         }
-        if(ProductPriceEntry.Text != null)
+
+        if (string.IsNullOrWhiteSpace(ProductNameEntry.Text) ||
+            !double.TryParse(ProductPriceEntry.Text, out var cost) ||
+            cost < 0 ||
+            ProductCategoryPicker.SelectedItem is not string categoryText ||
+            !char.TryParse(categoryText, out var category) ||
+            !uint.TryParse(ProductQuantityEntry.Text, out var quantity))
         {
-            ((Products)BindingContext).Cost = double.Parse(ProductPriceEntry.Text);
+            await DisplayAlertAsync("Error", "Enter a name, a valid non-negative price, a category and a whole-number quantity.", "OK");
+            return;
         }
-        if (ProductCategoryPicker.SelectedItem != null)
-        {
-            ((Products)BindingContext).Category = char.Parse(ProductCategoryPicker.SelectedItem.ToString());
-        }
-        if(ProductQuantityEntry.Text != null)
-        {
-            ((Products)BindingContext).Quantity = uint.Parse(ProductQuantityEntry.Text);
-        }
-        if(ProductNameEntry.Text != null || ProductPriceEntry.Text != null || ProductCategoryPicker.SelectedItem != null || ProductQuantityEntry.Text != null)
-        {
-            DisplayAlertAsync("Success", "Product details updated successfully.", "OK");
-        }
-        if (ProductNameEntry.Text == null && ProductPriceEntry.Text == null && ProductCategoryPicker.SelectedItem == null && ProductQuantityEntry.Text == null)
-        {
-            DisplayAlertAsync("Error", "Please fill in all fields.", "OK");
-        }
+
+        product.Name = ProductNameEntry.Text.Trim();
+        product.Cost = cost;
+        product.Category = category;
+        product.Quantity = quantity;
+        descriptionLabel.Text = product.Description();
+
+        await DisplayAlertAsync("Success", "Product details updated successfully.", "OK");
     }
-    private async void BackButtonClicked(object sender, EventArgs e)
+
+    private async void ButtonRemover(object? sender, EventArgs e)
     {
-        await Navigation.PopAsync();
+        if (product is null || productsList is null || allProducts is null)
+        {
+            await DisplayAlertAsync("Error", "The product could not be removed.", "OK");
+            return;
+        }
+
+        var confirmed = await DisplayAlertAsync("Remove product", "Remove this product?", "Remove", "Cancel");
+        if (!confirmed)
+        {
+            return;
+        }
+
+        productsList.Remove(product);
+        allProducts.Remove(product);
+        await DisplayAlertAsync("Success", "Product removed successfully.", "OK");
+        await Shell.Current.GoToAsync("..");
+    }
+
+    private async void BackButtonClicked(object? sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("..");
     }
 }

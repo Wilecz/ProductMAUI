@@ -6,11 +6,9 @@ namespace Product
 {
     public partial class MainPage : ContentPage
     {
-        public readonly List<Products> productsList = new();
         private readonly List<ProductInterface> all = new();
         public ObservableCollection<ProductInterface> SeenProducts { get; } = new();
-        public ObservableCollection<ProductInterface> ProductsCollection { get; set; }
-        List<Products> products = new List<Products>
+        private readonly List<Products> products = new()
         {
             new Products {Name = "Jajko", Cost = 34.23, Category = 'B', Quantity = 2},
             new Products {Name = "Kalosz", Cost = 1.21, Category = 'C', Quantity = 6},
@@ -25,7 +23,7 @@ namespace Product
             BindingContext = this;
             Refresh();
         }
-        private async void ButtonSearch(object sender, EventArgs e)
+        private async void ButtonSearch(object? sender, EventArgs e)
         {
             var rnd = new Random();
             int searchTextSize = 0;
@@ -37,29 +35,36 @@ namespace Product
                 await Task.Delay(searchTextSize + 15);
             }
             searchTextSize = 0;
-            Refresh();
+            //Refresh();
         }
-        private void ButtonAdder(object sender, EventArgs e)
+        private async void ButtonAdder(object? sender, EventArgs e)
         {
-            if (ProductNameEntry.Text != null && ProductPriceEntry.Text != null && ProductCategoryPicker.SelectedItem != null && ProductQuantityEntry.Text != null)
+            if (string.IsNullOrWhiteSpace(ProductNameEntry.Text) ||
+                !double.TryParse(ProductPriceEntry.Text, out var newProductCost) ||
+                newProductCost < 0 ||
+                ProductCategoryPicker.SelectedItem is not string categoryText ||
+                !char.TryParse(categoryText, out var newProductCategory) ||
+                !uint.TryParse(ProductQuantityEntry.Text, out var newProductQuantity))
             {
-                string newProductName = ProductNameEntry.Text;
-                double newProductCost = double.Parse(ProductPriceEntry.Text);
-                char newProductCategory = char.Parse(ProductCategoryPicker.SelectedItem.ToString());
-                uint newProductQuantity = uint.Parse(ProductQuantityEntry.Text);
-                var newProduct = new Products { Name = newProductName, Cost = newProductCost, Category = newProductCategory, Quantity = newProductQuantity };
-                products.Add(newProduct);
-                all.Add(newProduct);
-                Refresh();
+                await DisplayAlertAsync("Error", "Enter a name, a valid non-negative price, a category and a whole-number quantity.", "OK");
+                return;
             }
-            else
+
+            var newProduct = new Products
             {
-                DisplayAlertAsync("Error", "Please fill in all fields.", "OK");
-            }
+                Name = ProductNameEntry.Text.Trim(),
+                Cost = newProductCost,
+                Category = newProductCategory,
+                Quantity = newProductQuantity
+            };
+            products.Add(newProduct);
+            all.Add(newProduct);
+            ClearAddProductForm();
+            //Refresh();
         }
-        private void ProductSearchTextChanged(object sender, TextChangedEventArgs e)
+        private void ProductSearchTextChanged(object? sender, TextChangedEventArgs e)
         {
-            Refresh();
+            //Refresh();
         }
         private void Refresh()
         {
@@ -67,24 +72,34 @@ namespace Product
             foreach (var p in ClassLibrary.Browser.Search(all, ProductSearchEntry.Text))
                 SeenProducts.Add(p);
         }
-        private async void DetailButtonClicked(object sender, EventArgs e)
+        private async void DetailButtonClicked(object? sender, EventArgs e)
         {
             if (ProductCollectionView?.SelectedItem is Products selected)
             {
                 await Shell.Current.GoToAsync(nameof(DetailsPage), new Dictionary<string, object>
                 {
-                    ["Product"] = selected
+                    ["Product"] = selected,
+                    ["ProductsList"] = products,
+                    ["AllProducts"] = all
                 });
             }
         }
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            Refresh();
+            //Refresh();
         }
-        private void ButtonShowAddProductStack(object sender, EventArgs e)
+        private void ButtonShowAddProductStack(object? sender, EventArgs e)
         {
             AddProductStack.IsVisible = !AddProductStack.IsVisible;
+        }
+
+        private void ClearAddProductForm()
+        {
+            ProductNameEntry.Text = string.Empty;
+            ProductPriceEntry.Text = string.Empty;
+            ProductQuantityEntry.Text = string.Empty;
+            ProductCategoryPicker.SelectedItem = null;
         }
     }
 }

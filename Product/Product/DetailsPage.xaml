@@ -2,29 +2,35 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Product.DetailsPage"
-             Title="DetailsPage">
-    <VerticalStackLayout>
-        <Label 
-            x:Name="descriptionLabel" 
-            FontSize="20"/>
-        <HorizontalStackLayout>
-            <Entry
+             Title="Product details">
+    <ScrollView>
+        <VerticalStackLayout 
+            Padding="24" 
+            Spacing="12">
+            <Button
+                Text="Remove"
+                Clicked="ButtonRemover"
+                x:Name="RemoveButton"
                 HorizontalOptions="Center"
+                BackgroundColor="IndianRed" />
+            <Label
+                x:Name="descriptionLabel"
+                FontSize="20"/>
+            <Entry
                 Placeholder="Enter product name"
-                x:Name="ProductNameEntry"/>
+                ClearButtonVisibility="WhileEditing"
+                x:Name="ProductNameEntry" />
             <Entry
-                HorizontalOptions="Center"
                 Placeholder="Enter product price"
                 Keyboard="Numeric"
-                x:Name="ProductPriceEntry"/>
+                ClearButtonVisibility="WhileEditing"
+                x:Name="ProductPriceEntry" />
             <Entry
-                HorizontalOptions="Center"
                 Placeholder="Enter product quantity"
                 Keyboard="Numeric"
-                x:Name="ProductQuantityEntry"/>
-            <Picker
-                HorizontalOptions="Center"
-                x:Name="ProductCategoryPicker">
+                ClearButtonVisibility="WhileEditing"
+                x:Name="ProductQuantityEntry" />
+            <Picker x:Name="ProductCategoryPicker">
                 <Picker.Items>
                     <x:String>A</x:String>
                     <x:String>B</x:String>
@@ -32,13 +38,12 @@
                     <x:String>D</x:String>
                 </Picker.Items>
             </Picker>
-        </HorizontalStackLayout>
-        <Button
-            FontSize="20"
-            Text="Submit"
-            Clicked="ButtonChanger"
-            x:Name="ChangeButton"
-            HorizontalOptions="Center"/>
-        <Button Text="Back to List" Clicked="BackButtonClicked" />
-    </VerticalStackLayout>
+
+            <Button
+                Text="Accept"
+                Clicked="ButtonChanger"
+                x:Name="ChangeButton" />
+            <Button Text="Back to list" Clicked="BackButtonClicked" />
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
