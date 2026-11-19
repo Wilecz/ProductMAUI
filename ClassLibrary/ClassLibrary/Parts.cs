@@ -14,7 +14,7 @@ namespace ClassLibrary
         }
         public override string Description()
         {
-            return $"Producer: {Producer}, Product Name: {Name}, Cost: {Cost}, Category: {Category}, Quantity: {Quantity}";
+            return $"Product Name: {Name}, Cost: {Cost}, Category: {Category}, Quantity: {Quantity}, Producer: {Producer}";
         }
     }
 }

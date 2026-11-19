@@ -1,0 +1,179 @@
+<Window x:Class="ProductWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProductWPF"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Height="450"
+        Width="800"
+        Background="#FF292938">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"
+                   Text="Catalog of Products"
+                   HorizontalAlignment="Center"
+                   FontSize="24"
+                   Margin="0,0,0,20"
+                   Foreground="White"/>
+
+        <ListBox x:Name="ProductListBox"
+                 Grid.Row="1"
+                 Grid.Column="0"
+                 Background="#FF29161E"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Stretch"
+                 HorizontalContentAlignment="Stretch">
+
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="1.2*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="0.8*"/>
+                            <ColumnDefinition Width="1.2*"/>
+                            <ColumnDefinition Width="70"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0"
+                                   Text="{Binding Name}"
+                                   FontWeight="Bold"
+                                   Foreground="White"
+                                   TextTrimming="CharacterEllipsis"/>
+
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding Category}"
+                                   Foreground="White"
+                                   TextTrimming="CharacterEllipsis"/>
+
+                        <TextBlock Grid.Column="2"
+                                   Text="{Binding Cost, StringFormat={}{0:F2}zł}"
+                                   Foreground="White"/>
+
+                        <TextBlock Grid.Column="3"
+                                   Text="{Binding Quantity}"
+                                   Foreground="White"/>
+
+                        <TextBlock Grid.Column="4"
+                                   Text="{Binding Producer}"
+                                   Foreground="White"
+                                   TextTrimming="CharacterEllipsis"/>
+
+                        <Border Grid.Column="5"
+                                Width="70"
+                                Height="20"
+                                Margin="5,0,0,0"
+                                HorizontalAlignment="Left"
+                                Background="{Binding Color}"
+                                ToolTip="{Binding Color}"
+                                BorderBrush="Black"
+                                BorderThickness="2"
+                                CornerRadius="3">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Color}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <StackPanel Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="20,0,0,0"
+                    DataContext="{Binding SelectedItem, ElementName=ProductListBox}">
+            <TextBlock Text="{Binding Name}"
+                       FontSize="18"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       TextWrapping="Wrap"/>
+
+            <TextBlock Text="{Binding Cost, StringFormat={}{0:F2}zł}"
+                       Foreground="White"/>
+
+            <TextBlock Text="{Binding Category}"
+                       Foreground="White"
+                       TextWrapping="Wrap"/>
+
+            <TextBlock Text="{Binding Quantity}"
+                       Foreground="White"/>
+
+            <TextBlock Text="{Binding Producer}"
+                       Foreground="White"
+                       TextWrapping="Wrap"/>
+
+            <Border Width="80"
+                    Height="80"
+                    Margin="5"
+                    HorizontalAlignment="Left"
+                    Background="{Binding Color}"
+                    ToolTip="{Binding Color}"
+                    BorderBrush="Black"
+                    BorderThickness="2"
+                    CornerRadius="3">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Color}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+            </Border>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Orientation="Horizontal"
+                    Margin="20,0,0,0">
+            <TextBlock Text="Products: "
+                       Foreground="White"/>
+            <TextBlock x:Name="NumberProductsTextBlock"
+                       FontWeight="Bold"
+                       Foreground="White"/>
+            <TextBlock Text=" | Value of inventory: "
+                       Foreground="White"/>
+            <TextBlock x:Name="ValueInventoryTextBlock"
+                       FontWeight="Bold"
+                       Foreground="White"/>
+        </StackPanel>
+
+        <TextBlock x:Name="WarehouseValueTextBlock"
+                   Grid.Row="2"
+                   Grid.Column="1"
+                   Text="Warehouse Value: "
+                   FontWeight="Bold"
+                   Foreground="White"
+                   HorizontalAlignment="Right"/>
+    </Grid>
+</Window>

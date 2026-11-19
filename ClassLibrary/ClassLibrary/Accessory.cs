@@ -10,7 +10,7 @@ namespace ClassLibrary
 
         public override string Description()
         {
-            return $"Color: {Color}, Product Name: {Name}, Cost: {Cost}, Category: {Category}, Quantity: {Quantity}";
+            return $"Product Name: {Name}, Cost: {Cost}, Category: {Category}, Quantity: {Quantity}, Color: {Color}";
         }
 
         public override string ToString() => Description();
